@@ -1,0 +1,21 @@
+[
+      
+      {
+        "speaker": "@PeterCabot",
+        "spanish": "La abuela Maggie hizo todo lo posible para mantener las cosas normales, pero nada era normal.",
+        "english": "Grandma Maggie did everything she could to keep things normal, but nothing was normal.",
+        "prompt": "Appreciative but resigned tone"
+      },
+      {
+        "speaker": "@PeterCabot",
+        "spanish": "Mis padres se habían ido y no importaba cuánto lo deseara, no iban a volver.",
+        "english": "My parents were gone and no matter how much I wished it, they weren't coming back.",
+        "prompt": ""
+      },
+      {
+        "speaker": "@PeterCabot",
+        "spanish": "Después del funeral, estaba en mi habitación, jugando con el camión rojo que mamá me había regalado para mi cumpleaños.",
+        "english": "After the funeral, I was in my room, playing with the red truck that Mom had given me for my birthday.",
+        "prompt": ""
+      }
+    ]
