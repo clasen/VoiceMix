@@ -25,7 +25,7 @@ export class VoiceMix {
 
         this.temperature = "0.8";
         this.exaggeration = "0";
-        this.prosodyRate = "100%";
+        // this.prosodyRate = "100%";
         // this.prosodyPitch = "medium";
 
         this.requestsQueue = []; // Cola para las solicitudes pendientes
@@ -250,7 +250,6 @@ export class VoiceMix {
         const speakAttributes = [];
 
         if (options.promptText) {
-            options.prosodyRate = "110%"
             speakAttributes.push(`prompt="${options.promptText}"`);
             // speakAttributes.push(`xml:lang="en-us"`);
             if (options.temperature) speakAttributes.push(`temperature="${options.temperature}"`);

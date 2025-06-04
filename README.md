@@ -8,13 +8,13 @@ VoiceMix is a flexible text-to-speech library that allows you to generate speech
 npm install voicemix dotenv
 ```
 
-## Environment Setup
+### Environment Setup
 
 Create a `.env` file in your project root with your API keys:
 
 ```plaintext
-ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
-RESEMBLE_API_KEY=your_resemble_api_key_here
+ELEVENLABS_API_KEY="6e04xxxxxxxxxxxxxxxxxxxxxxxxa9da"
+RESEMBLE_API_KEY="9YWxxxxxxxxxxxxxxxxxmgtt"
 ```
 
 ## Usage
