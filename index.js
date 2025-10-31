@@ -3,6 +3,7 @@ import path from 'path';
 import hashFactory from 'hash-factory';
 import { ElevenLabsProvider } from './providers/elevenlabs.js';
 import { ResembleProvider } from './providers/resemble.js';
+import { CartesiaProvider } from './providers/cartesia.js';
 import { ValidationError, formatError } from './errors.js';
 
 const hash = hashFactory({ words: true, alpha: true });
@@ -51,6 +52,12 @@ export class VoiceMix {
     useResemble(apiKey) {
         this.provider = new ResembleProvider(apiKey);
         this.providerType = 'resemble';
+        return this;
+    }
+
+    useCartesia(apiKey) {
+        this.provider = new CartesiaProvider(apiKey);
+        this.providerType = 'cartesia';
         return this;
     }
 

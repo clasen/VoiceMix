@@ -15,6 +15,7 @@ Create a `.env` file in your project root with your API keys:
 ```plaintext
 ELEVENLABS_API_KEY="6e04xxxxxxxxxxxxxxxxxxxxxxxxa9da"
 RESEMBLE_API_KEY="9YWxxxxxxxxxxxxxxxxxmgtt"
+CARTESIA_API_KEY="sk_car_xxxxxxxxxxxxxxxxxxxxjr"
 ```
 
 ## Usage
@@ -36,6 +37,8 @@ voiceMix
 
 ### Advanced Usage
 
+#### Using Resemble AI
+
 ```javascript
 const voiceMix = new VoiceMix();
 
@@ -47,6 +50,20 @@ voiceMix
     .say('Your text here')
     .save();
 ```
+
+#### Using Cartesia
+
+```javascript
+const voiceMix = new VoiceMix();
+
+voiceMix
+    .useCartesia()  // https://cartesia.ai/
+    .voice('your-cartesia-voice-id') // Select specific voice from your Cartesia account
+    .say('Your text here')
+    .save();
+```
+
+**Note:** You need to use a valid voice ID from your Cartesia account. You can find available voices in your Cartesia dashboard.
 
 ### Batch Processing
 
@@ -86,7 +103,10 @@ Example `lines.json`:
 - Multiple voice support
 - Language selection
 - Voice prompts for style control (Resemble AI)
-- Support for different TTS engines
+- Support for multiple TTS providers:
+  - ElevenLabs
+  - Resemble AI
+  - Cartesia
 - Simple chainable API
 
 ## License

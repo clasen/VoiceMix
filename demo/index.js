@@ -9,15 +9,15 @@ const script = JSON.parse(fs.readFileSync('./lines.json', 'utf8'));
 const voiceMix = new VoiceMix()//.useResemble().lang('en-US');
 
 // Process each line in the script
-for (const entry of script) {
+// for (const entry of script) {
 
-    voiceMix
-        .prompt(entry.prompt || 'Friendly and conversational tone')
-        // .voice('ba875a0a') // Peter v2
-        .voice('EbhcCfMvNsbvjN6OhjpJ')
-        .say(entry.english)
-        .save();
-}
+//     voiceMix
+//         .prompt(entry.prompt || 'Friendly and conversational tone')
+//         // .voice('ba875a0a') // Peter v2
+//         .voice('EbhcCfMvNsbvjN6OhjpJ')
+//         .say(entry.english)
+//         .save();
+// }
 
 // const voiceMix = new VoiceMix();
 
@@ -40,3 +40,10 @@ for (const entry of script) {
 //     .voice('ba875a0a') // Peter v2
 //     .say(line)
 //     .save();
+
+// Example using Cartesia
+// Note: Replace with your actual Cartesia voice ID from your account
+voiceMix.useCartesia()
+    .voice('6ccbfb76-1fc6-48f7-b71d-91ac6298247b') // Cartesia voice ID from your account
+    .say('<emotion value="happy" />Hmm… okay, let me think… yeah, this is actually kind of fun. [laughter] Let\'s dive in.')
+    .save();
