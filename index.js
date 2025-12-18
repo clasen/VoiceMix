@@ -235,7 +235,6 @@ export class VoiceMix {
                 prosodyRate: request.prosodyRate,
                 prosodyPitch: request.prosodyPitch
             });
-            console.log(text);
 
             return await this.provider.save(
                 request.ttsId,
