@@ -157,7 +157,9 @@ export class VoiceMix {
 
     say(text) {
         this.text = text;
-        return this.file(this._filename(text));
+        // Eliminar contenido entre corchetes para el nombre del archivo
+        const textForFilename = text.replace(/\[.*?\]/g, '').trim();
+        return this.file(this._filename(textForFilename));
     }
 
     file(fileName) {
