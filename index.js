@@ -82,6 +82,13 @@ export class VoiceMix {
         return this;
     }
 
+    v3() {
+        if (this.providerType === 'elevenlabs') {
+            this.provider.v3();
+        }
+        return this;
+    }
+
     setSampleRate(rate) {
         if (this.providerType === 'resemble') {
             this.provider.setSampleRate(rate);

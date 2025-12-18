@@ -34,6 +34,11 @@ export class ElevenLabsProvider {
         return this;
     }
 
+    v3() {
+        this.model_id = 'eleven_v3';
+        return this;
+    }    
+
     _getRequestOptions(voiceId, text, format) {
         return {
             method: "post",

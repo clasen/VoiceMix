@@ -43,7 +43,15 @@ const voiceMix = new VoiceMix()//.useResemble().lang('en-US');
 
 // Example using Cartesia
 // Note: Replace with your actual Cartesia voice ID from your account
-voiceMix.useCartesia()
-    .voice('6ccbfb76-1fc6-48f7-b71d-91ac6298247b') // Cartesia voice ID from your account
-    .say('<emotion value="happy" />Hmm… okay, let me think… yeah, this is actually kind of fun. [laughter] Let\'s dive in.')
+// voiceMix.useCartesia()
+//     .voice('6ccbfb76-1fc6-48f7-b71d-91ac6298247b') // Cartesia voice ID from your account
+//     .say('<emotion value="happy" />Hmm… okay, let me think… yeah, this is actually kind of fun. [laughter] Let\'s dive in.')
+//     .save();
+
+// Example using ElevenLabs v3 model
+// v3 is the latest and most advanced model from ElevenLabs
+voiceMix
+    .v3() // Use the ElevenLabs v3 model
+    .voice('dxvGlXoa4TLMyfYR6uC9') // ElevenLabs voice ID
+    .say('[sorprendida] gracias! [risas] dos personas creyeron en mí cuando nadie más lo hizo!')
     .save();
