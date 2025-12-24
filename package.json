@@ -1,7 +1,7 @@
 {
   "name": "voicemix",
   "type": "module",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "🗣️ VoiceMix - A simple text-to-speech tool using ElevenLabs, Cartesia and Resemble AI APIs.",
   "main": "index.js",
   "repository": {
