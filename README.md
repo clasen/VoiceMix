@@ -8,6 +8,11 @@ VoiceMix is a flexible text-to-speech library that allows you to generate speech
 npm install voicemix dotenv
 ```
 
+> **AI Skill**: You can also add VoiceMix as a skill for AI agentic development:
+> ```bash
+> npx skills add https://github.com/clasen/VoiceMix --skill voicemix
+> ```
+
 ### Environment Setup
 
 Create a `.env` file in your project root with your API keys:
