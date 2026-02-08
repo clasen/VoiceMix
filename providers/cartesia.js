@@ -1,6 +1,7 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { pipeline } from 'stream/promises';
 import { ProviderError } from '../errors.js';
 
 export class CartesiaProvider {
@@ -70,18 +71,21 @@ export class CartesiaProvider {
 
             const fullPath = path.join(filePath, fileName);
             const writer = fs.createWriteStream(fullPath);
-            response.data.pipe(writer);
 
-            return new Promise((resolve, reject) => {
-                writer.on('finish', () => resolve(fullPath));
-                writer.on('error', (err) => {
-                    reject(new ProviderError(
-                        'Failed to write audio file',
-                        'cartesia',
-                        { path: fullPath, error: err.message }
-                    ));
-                });
-            });
+            try {
+                await pipeline(response.data, writer);
+                return fullPath;
+            } catch (err) {
+                // Clean up partial file on failure
+                if (fs.existsSync(fullPath)) {
+                    fs.unlinkSync(fullPath);
+                }
+                throw new ProviderError(
+                    'Failed to write audio file',
+                    'cartesia',
+                    { path: fullPath, error: err.message }
+                );
+            }
         } catch (error) {
             if (error instanceof ProviderError) {
                 throw error;

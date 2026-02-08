@@ -1,6 +1,7 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { pipeline } from 'stream/promises';
 import { ProviderError } from '../errors.js';
 
 export class ElevenLabsProvider {
@@ -36,6 +37,10 @@ export class ElevenLabsProvider {
 
     v3() {
         this.model_id = 'eleven_v3';
+        this.voice_settings = {
+            stability: this.voice_settings.stability,
+        };
+
         return this;
     }    
 
@@ -80,18 +85,21 @@ export class ElevenLabsProvider {
 
             const fullPath = path.join(filePath, fileName);
             const writer = fs.createWriteStream(fullPath);
-            response.data.pipe(writer);
 
-            return new Promise((resolve, reject) => {
-                writer.on('finish', () => resolve(fullPath));
-                writer.on('error', (err) => {
-                    reject(new ProviderError(
-                        'Failed to write audio file',
-                        'elevenlabs',
-                        { path: fullPath, error: err.message }
-                    ));
-                });
-            });
+            try {
+                await pipeline(response.data, writer);
+                return fullPath;
+            } catch (err) {
+                // Clean up partial file on failure
+                if (fs.existsSync(fullPath)) {
+                    fs.unlinkSync(fullPath);
+                }
+                throw new ProviderError(
+                    'Failed to write audio file',
+                    'elevenlabs',
+                    { path: fullPath, error: err.message }
+                );
+            }
         } catch (error) {
             if (error instanceof ProviderError) {
                 throw error;

@@ -149,9 +149,11 @@ export class VoiceMix {
     }
 
     _filename(text) {
-        text += " " + this.promptText + " " + this.xmlLang + " " + this.ttsId;
-        text += " " + this.providerType;
-        const filename = this.randPosfix ? hashNow(text) : hash(text);
+        const parts = [text, this.promptText, this.xmlLang, this.ttsId, this.providerType]
+            .map(v => v ?? '')
+            .join(' ');
+
+        const filename = this.randPosfix ? hashNow(parts) : hash(parts);
         return this.filePrefix + filename;
     }
 

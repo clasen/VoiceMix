@@ -1,7 +1,7 @@
 {
   "name": "voicemix",
   "type": "module",
-  "version": "1.2.2",
+  "version": "1.2.8",
   "description": "🗣️ VoiceMix - A simple text-to-speech tool using ElevenLabs, Cartesia and Resemble AI APIs.",
   "main": "index.js",
   "repository": {
@@ -14,7 +14,7 @@
   "author": "Martin Clasen",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.9.0",
+    "axios": "^1.13.4",
     "hash-factory": "^1.1.2"
   },
   "keywords": [
