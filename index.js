@@ -21,6 +21,8 @@ export class VoiceMix {
         this.filePrefix = '';
         this.randPosfix = false;
         this.drymode = false;
+        this.sayPrefix = '';
+        this.sayPostfix = '';
         this.promptText = null;
         this.xmlLang = 'en-us';
 
@@ -158,7 +160,7 @@ export class VoiceMix {
     }
 
     say(text) {
-        this.text = text;
+        this.text = this.sayPrefix + text + this.sayPostfix;
         return this.file(this._filename(text));
     }
 
