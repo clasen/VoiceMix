@@ -13,9 +13,6 @@ export class ResembleProvider {
             precision: 'PCM_16'
         };
 
-        if (!this.apiKey) {
-            throw new ProviderError('Resemble API key is required', 'resemble');
-        }
     }
 
     _getRequestOptions(endpoint, data) {
@@ -33,6 +30,9 @@ export class ResembleProvider {
 
     async save(voiceId, text, format, filePath, fileName) {
         try {
+            if (!this.apiKey) {
+                throw new ProviderError('Resemble API key is required', 'resemble');
+            }
             if (!voiceId) {
                 throw new ProviderError('Voice ID is required', 'resemble');
             }

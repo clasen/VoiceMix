@@ -15,9 +15,6 @@ export class ElevenLabsProvider {
             use_speaker_boost: true
         };
 
-        if (!this.apiKey) {
-            throw new ProviderError('ElevenLabs API key is required', 'elevenlabs');
-        }
     }
 
     monolingual_v1() {
@@ -64,6 +61,9 @@ export class ElevenLabsProvider {
 
     async save(voiceId, text, format, filePath, fileName) {
         try {
+            if (!this.apiKey) {
+                throw new ProviderError('ElevenLabs API key is required', 'elevenlabs');
+            }
             if (!voiceId) {
                 throw new ProviderError('Voice ID is required', 'elevenlabs');
             }

@@ -17,9 +17,6 @@ export class CartesiaProvider {
             }
         };
 
-        if (!this.apiKey) {
-            throw new ProviderError('Cartesia API key is required', 'cartesia');
-        }
     }
 
     _getRequestOptions(voiceId, text, format = 'mp3') {
@@ -53,6 +50,9 @@ export class CartesiaProvider {
 
     async save(voiceId, text, format, filePath, fileName) {
         try {
+            if (!this.apiKey) {
+                throw new ProviderError('Cartesia API key is required', 'cartesia');
+            }
             if (!voiceId) {
                 throw new ProviderError('Voice ID is required', 'cartesia');
             }
