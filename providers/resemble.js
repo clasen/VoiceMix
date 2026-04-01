@@ -1,4 +1,3 @@
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { ProviderError, ValidationError } from '../errors.js';
@@ -15,17 +14,16 @@ export class ResembleProvider {
 
     }
 
-    _getRequestOptions(endpoint, data) {
-        return {
-            method: 'post',
-            url: `${this.baseUrl}${endpoint}`,
-            headers: {
-                'Authorization': `Bearer ${this.apiKey}`,
-                'Content-Type': 'application/json',
-                'Accept-Encoding': 'gzip, deflate, br'
-            },
-            data
+    _getFetchParams(endpoint, data) {
+        const url = `${this.baseUrl}${endpoint}`;
+        const headers = {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br'
         };
+        const body = JSON.stringify(data);
+
+        return { url, headers, body };
     }
 
     async save(voiceId, text, format, filePath, fileName) {
@@ -43,19 +41,42 @@ export class ResembleProvider {
                 throw new ProviderError('File path and name are required', 'resemble');
             }
 
-            const response = await axios(this._getRequestOptions('/synthesize', {
+            const { url, headers, body } = this._getFetchParams('/synthesize', {
                 voice_uuid: voiceId,
                 data: text,
                 sample_rate: this.defaultSettings.sample_rate,
                 output_format: format,
                 precision: this.defaultSettings.precision
-            }));
+            });
 
-            if (!response.data.success) {
+            const response = await fetch(url, { method: 'POST', headers, body });
+
+            if (!response.ok) {
+                let data;
+                const raw = await response.text().catch(() => '');
+                try {
+                    data = raw ? JSON.parse(raw) : raw;
+                } catch {
+                    data = raw;
+                }
                 throw new ProviderError(
-                    response.data.issues?.join(', ') || 'Synthesis failed',
+                    'Failed to save audio from Resemble API',
                     'resemble',
-                    response.data
+                    {
+                        status: response.status,
+                        statusText: response.statusText,
+                        data,
+                    }
+                );
+            }
+
+            const responseData = await response.json();
+
+            if (!responseData.success) {
+                throw new ProviderError(
+                    responseData.issues?.join(', ') || 'Synthesis failed',
+                    'resemble',
+                    responseData
                 );
             }
 
@@ -64,8 +85,8 @@ export class ResembleProvider {
             }
 
             const fullPath = path.join(filePath, fileName);
-            const audioBuffer = Buffer.from(response.data.audio_content, 'base64');
-            
+            const audioBuffer = Buffer.from(responseData.audio_content, 'base64');
+
             return new Promise((resolve, reject) => {
                 fs.writeFile(fullPath, audioBuffer, (err) => {
                     if (err) {
@@ -83,21 +104,7 @@ export class ResembleProvider {
             if (error instanceof ProviderError) {
                 throw error;
             }
-            
-            if (axios.isAxiosError(error)) {
-                const details = {
-                    status: error.response?.status,
-                    statusText: error.response?.statusText,
-                    data: error.response?.data
-                };
-                
-                throw new ProviderError(
-                    'Failed to save audio from Resemble API',
-                    'resemble',
-                    details
-                );
-            }
-            
+
             throw new ProviderError(
                 'An unexpected error occurred while saving audio',
                 'resemble',
@@ -135,4 +142,4 @@ export class ResembleProvider {
         this.defaultSettings.output_format = format;
         return this;
     }
-} 
+}

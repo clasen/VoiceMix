@@ -1,6 +1,6 @@
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
 import { ProviderError } from '../errors.js';
 
@@ -39,24 +39,22 @@ export class ElevenLabsProvider {
         };
 
         return this;
-    }    
+    }
 
-    _getRequestOptions(voiceId, text, format) {
-        return {
-            method: "post",
-            url: `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-            headers: {
-                accept: "audio/" + (format === "mp3" ? "mpeg" : format),
-                "xi-api-key": this.apiKey,
-                "Content-Type": "application/json",
-            },
-            data: {
-                text,
-                model_id: this.model_id,
-                voice_settings: this.voice_settings,
-            },
-            responseType: "stream",
+    _getFetchParams(voiceId, text, format) {
+        const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+        const headers = {
+            accept: 'audio/' + (format === 'mp3' ? 'mpeg' : format),
+            'xi-api-key': this.apiKey,
+            'Content-Type': 'application/json',
         };
+        const body = JSON.stringify({
+            text,
+            model_id: this.model_id,
+            voice_settings: this.voice_settings,
+        });
+
+        return { url, headers, body };
     }
 
     async save(voiceId, text, format, filePath, fileName) {
@@ -74,10 +72,21 @@ export class ElevenLabsProvider {
                 throw new ProviderError('File path and name are required', 'elevenlabs');
             }
 
-            const response = await axios({
-                ...this._getRequestOptions(voiceId, text, format),
-                responseType: 'stream'
-            });
+            const { url, headers, body } = this._getFetchParams(voiceId, text, format);
+            const response = await fetch(url, { method: 'POST', headers, body });
+
+            if (!response.ok) {
+                const errorBody = await response.text().catch(() => '');
+                throw new ProviderError(
+                    'Failed to save audio from ElevenLabs API',
+                    'elevenlabs',
+                    {
+                        status: response.status,
+                        statusText: response.statusText,
+                        data: errorBody,
+                    }
+                );
+            }
 
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
@@ -87,7 +96,7 @@ export class ElevenLabsProvider {
             const writer = fs.createWriteStream(fullPath);
 
             try {
-                await pipeline(response.data, writer);
+                await pipeline(Readable.fromWeb(response.body), writer);
                 return fullPath;
             } catch (err) {
                 // Clean up partial file on failure
@@ -104,21 +113,7 @@ export class ElevenLabsProvider {
             if (error instanceof ProviderError) {
                 throw error;
             }
-            
-            if (axios.isAxiosError(error)) {
-                const details = {
-                    status: error.response?.status,
-                    statusText: error.response?.statusText,
-                    data: error.response?.data
-                };
-                
-                throw new ProviderError(
-                    'Failed to save audio from ElevenLabs API',
-                    'elevenlabs',
-                    details
-                );
-            }
-            
+
             throw new ProviderError(
                 'An unexpected error occurred while saving audio',
                 'elevenlabs',
@@ -126,4 +121,4 @@ export class ElevenLabsProvider {
             );
         }
     }
-} 
+}
