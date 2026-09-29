@@ -132,6 +132,7 @@ Example `lines.json`:
   - `multilingual_v2()` - Improved multilingual model (default)
   - `v3()` - Expressive v3 model
   - `v4()` - Latest and most advanced model
+  - `v4_turbo()` - Low-latency variant of v4
 - Simple chainable API
 
 ## License

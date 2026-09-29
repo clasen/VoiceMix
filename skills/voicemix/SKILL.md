@@ -95,6 +95,7 @@ vm.multilingual_v1()   // First multilingual
 vm.multilingual_v2()   // Default — improved multilingual
 vm.v3()                // Expressive v3
 vm.v4()                // Latest, most advanced (stability + similarity only)
+vm.v4_turbo()          // Low-latency v4 (stability + similarity only)
 ```
 
 ### Speech Generation Chain

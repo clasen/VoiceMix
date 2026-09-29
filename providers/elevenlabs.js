@@ -42,7 +42,15 @@ export class ElevenLabsProvider {
     }
 
     v4() {
-        this.model_id = 'eleven_v4';
+        return this._useV4Model('eleven_v4');
+    }
+
+    v4_turbo() {
+        return this._useV4Model('eleven_v4_turbo');
+    }
+
+    _useV4Model(modelId) {
+        this.model_id = modelId;
         this.voice_settings = {
             stability: this.voice_settings.stability,
             similarity_boost: this.voice_settings.similarity_boost,
