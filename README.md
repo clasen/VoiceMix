@@ -40,19 +40,19 @@ voiceMix
     .save();
 ```
 
-### Using ElevenLabs v3 Model
+### Using ElevenLabs v4 Model
 
 ```javascript
 const voiceMix = new VoiceMix();
 
 voiceMix
-    .v3() // Use the latest ElevenLabs v3 model
+    .v4() // Use the latest ElevenLabs v4 model
     .voice('EbhcCfMvNsbvjN6OhjpJ')
-    .say('Hello! This is using the ElevenLabs v3 model.')
+    .say('Hello! This is using the ElevenLabs v4 model.')
     .save();
 ```
 
-The v3 model is the latest and most advanced model from ElevenLabs, providing the most natural and expressive voice generation.
+The v4 model is the latest and most advanced model from ElevenLabs. It only uses the stability and similarity voice settings; style, speed and SSML are not supported.
 
 ### Advanced Usage
 
@@ -123,14 +123,15 @@ Example `lines.json`:
 - Language selection
 - Voice prompts for style control (Resemble AI)
 - Support for multiple TTS providers:
-  - ElevenLabs (including v3 model)
+  - ElevenLabs (including v4 model)
   - Resemble AI
   - Cartesia
 - Support for different ElevenLabs models:
   - `monolingual_v1()` - Original English model
   - `multilingual_v1()` - First multilingual model
   - `multilingual_v2()` - Improved multilingual model (default)
-  - `v3()` - Latest and most advanced model
+  - `v3()` - Expressive v3 model
+  - `v4()` - Latest and most advanced model
 - Simple chainable API
 
 ## License

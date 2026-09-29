@@ -41,6 +41,16 @@ export class ElevenLabsProvider {
         return this;
     }
 
+    v4() {
+        this.model_id = 'eleven_v4';
+        this.voice_settings = {
+            stability: this.voice_settings.stability,
+            similarity_boost: this.voice_settings.similarity_boost,
+        };
+
+        return this;
+    }
+
     _getFetchParams(voiceId, text, format) {
         const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
         const headers = {

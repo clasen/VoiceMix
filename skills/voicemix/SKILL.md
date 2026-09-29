@@ -93,7 +93,8 @@ vm.useCartesia(apiKey?)    // reads CARTESIA_API_KEY
 vm.monolingual_v1()    // English only
 vm.multilingual_v1()   // First multilingual
 vm.multilingual_v2()   // Default — improved multilingual
-vm.v3()                // Latest, most advanced
+vm.v3()                // Expressive v3
+vm.v4()                // Latest, most advanced (stability + similarity only)
 ```
 
 ### Speech Generation Chain

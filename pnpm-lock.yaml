@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      hash-factory:
+        specifier: ^1.1.2
+        version: 1.1.2
+
+packages:
+
+  hash-factory@1.1.2:
+    resolution: {integrity: sha512-CerN7nnQDiKPx4zUDHWAWFTHCfy/ytzF5VWx2+CHLNeVdFN6YGN35Cv3uXu9dAKCHE0haGQxmYrYrqkOllZSYQ==}
+
+snapshots:
+
+  hash-factory@1.1.2: {}
