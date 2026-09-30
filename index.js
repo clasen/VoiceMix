@@ -4,6 +4,7 @@ import hashFactory from 'hash-factory';
 import { ElevenLabsProvider } from './providers/elevenlabs.js';
 import { ResembleProvider } from './providers/resemble.js';
 import { CartesiaProvider } from './providers/cartesia.js';
+import { TypeSafeProvider } from './providers/typesafe.js';
 import { ValidationError, formatError } from './errors.js';
 
 const hash = hashFactory({ words: true, alpha: true });
@@ -25,6 +26,7 @@ export class VoiceMix {
         this.sayPostfix = '';
         this.promptText = null;
         this.xmlLang = 'en-us';
+        this.moodProvider = null;
 
         this.temperature = "0.8";
         this.exaggeration = "0";
@@ -105,6 +107,17 @@ export class VoiceMix {
         return this;
     }
 
+    autoMood(apiKey) {
+        this.moodProvider = new TypeSafeProvider(apiKey);
+        return this;
+    }
+
+    _autoMoodActive() {
+        return Boolean(this.moodProvider)
+            && this.providerType === 'elevenlabs'
+            && this.provider.supportsAudioTags();
+    }
+
     setSampleRate(rate) {
         if (this.providerType === 'resemble') {
             this.provider.setSampleRate(rate);
@@ -165,9 +178,9 @@ export class VoiceMix {
     }
 
     _filename(text) {
-        const parts = [text, this.promptText, this.xmlLang, this.ttsId, this.providerType]
-            .map(v => v ?? '')
-            .join(' ');
+        const values = [text, this.promptText, this.xmlLang, this.ttsId, this.providerType];
+        if (this._autoMoodActive()) values.push('autoMood');
+        const parts = values.map(v => v ?? '').join(' ');
 
         const filename = this.randPosfix ? hashNow(parts) : hash(parts);
         return this.filePrefix + filename;
@@ -197,6 +210,7 @@ export class VoiceMix {
             filePath: this.filePath,
             promptText: this.promptText,
             xmlLang: this.xmlLang,
+            moodProvider: this._autoMoodActive() ? this.moodProvider : null,
             shouldAddBreakTags: this.shouldAddBreakTags,
             temperature: this.temperature,
             exaggeration: this.exaggeration,
@@ -243,7 +257,12 @@ export class VoiceMix {
                 throw new ValidationError('Voice ID is required', 'ttsId');
             }
 
-            const text = this.addBreakTags(request.text, {
+            const moodTag = request.moodProvider
+                ? await request.moodProvider.moodTag(request.text)
+                : null;
+            const spokenText = moodTag ? `${moodTag} ${request.text}` : request.text;
+
+            const text = this.addBreakTags(spokenText, {
                 promptText: request.promptText,
                 xmlLang: request.xmlLang,
                 temperature: request.temperature,

@@ -21,6 +21,7 @@ Create a `.env` file in your project root with your API keys:
 ELEVENLABS_API_KEY="6e04xxxxxxxxxxxxxxxxxxxxxxxxa9da"
 RESEMBLE_API_KEY="9YWxxxxxxxxxxxxxxxxxmgtt"
 CARTESIA_API_KEY="sk_car_xxxxxxxxxxxxxxxxxxxxjr"
+TYPESAFE_API_KEY="your-typesafe-key" # only for autoMood()
 ```
 
 ## Usage
@@ -53,6 +54,21 @@ voiceMix
 ```
 
 The v4 model is the latest and most advanced model from ElevenLabs. It only uses the stability and similarity voice settings; style, speed and SSML are not supported.
+
+### Automatic Mood Tags (ElevenLabs v3 / v4)
+
+```javascript
+const voiceMix = new VoiceMix();
+
+voiceMix
+    .v3() // also v4() or v4_turbo()
+    .autoMood() // reads TYPESAFE_API_KEY, or pass the key: autoMood(apiKey)
+    .voice('EbhcCfMvNsbvjN6OhjpJ')
+    .say('Oh great, another Monday. Just what I needed.')
+    .save(); // sends "[sarcastic] Oh great, another Monday. Just what I needed."
+```
+
+`autoMood()` asks [TypeSafe Jev](https://docs.typesafe.ai) to pick one audio tag for each line, or none when the line is neutral. Tags: `[whispers]`, `[quietly]`, `[softly]`, `[nervous]`, `[hesitant]`, `[confused]`, `[thoughtful]`, `[serious]`, `[sarcastic]`, `[mischievously]`, `[annoyed]`, `[excited]`, `[crying]`, `[laughs]`, `[giggle]`, `[soft chuckle]`, `[nervous laugh]`, `[trying not to laugh]`, `[sighs]`, `[exhales]`, `[clears throat]`, `[swallows]`, `[gulps]`, `[yawning]`, `[pause]`, `[long pause]`, `[stammering]`, `[mumbling]`, `[breathless]`, `[sleepy]`, `[tired]`. It has no effect on other models or providers.
 
 ### Advanced Usage
 
@@ -122,6 +138,7 @@ Example `lines.json`:
 - Multiple voice support
 - Language selection
 - Voice prompts for style control (Resemble AI)
+- Automatic mood tags for ElevenLabs v3/v4 via TypeSafe Jev (`autoMood()`)
 - Support for multiple TTS providers:
   - ElevenLabs (including v4 model)
   - Resemble AI

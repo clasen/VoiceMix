@@ -52,6 +52,7 @@ Create a `.env` file with the relevant provider key(s):
 ELEVENLABS_API_KEY="your-elevenlabs-key"
 RESEMBLE_API_KEY="your-resemble-key"
 CARTESIA_API_KEY="your-cartesia-key"
+TYPESAFE_API_KEY="your-typesafe-key"   # only for autoMood()
 ```
 
 Only the key for the provider being used is required. ElevenLabs is the default provider.
@@ -115,6 +116,7 @@ vm.path('./output')                // change output directory
 vm.prefix('ch1_')                  // set filename prefix
 vm.file('custom-name')             // override auto-generated filename
 vm.id('voiceId')                   // alias for .voice()
+vm.autoMood(apiKey?)               // ElevenLabs v3/v4/v4_turbo only: TypeSafe Jev prepends one audio tag (or none) per line; reads TYPESAFE_API_KEY
 ```
 
 ### Resemble-Specific
@@ -151,6 +153,19 @@ await vm
   .v3()
   .voice('dxvGlXoa4TLMyfYR6uC9')
   .say('This uses the latest ElevenLabs model.')
+  .save();
+```
+
+### Generate with Automatic Mood Tags (ElevenLabs v3 / v4)
+
+```javascript
+const vm = new VoiceMix();
+
+await vm
+  .v3()
+  .autoMood()
+  .voice('dxvGlXoa4TLMyfYR6uC9')
+  .say('Shh... they might hear us.') // sent as "[whispers] Shh... they might hear us."
   .save();
 ```
 
@@ -242,6 +257,7 @@ await vm
 |---------|-------|-----|
 | `ProviderError: ElevenLabs API key is required` | Missing env var | Set `ELEVENLABS_API_KEY` in `.env` and call `dotenv.config()` |
 | `ProviderError: Cartesia API key is required` | Missing env var | Set `CARTESIA_API_KEY` in `.env` |
+| `ProviderError: TypeSafe API key is required` | `autoMood()` without key | Set `TYPESAFE_API_KEY` in `.env` |
 | `ValidationError: Voice ID is required` | `.voice()` not called | Chain `.voice('id')` before `.save()` |
 | 401 / 403 from provider API | Invalid or expired key | Verify the API key in provider dashboard |
 | Files not appearing | `save()` not awaited | Add `await` before `.save()` |

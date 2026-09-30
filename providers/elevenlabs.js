@@ -59,6 +59,10 @@ export class ElevenLabsProvider {
         return this;
     }
 
+    supportsAudioTags() {
+        return ['eleven_v3', 'eleven_v4', 'eleven_v4_turbo'].includes(this.model_id);
+    }
+
     _getFetchParams(voiceId, text, format) {
         const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
         const headers = {
