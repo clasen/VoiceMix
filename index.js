@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import hashFactory from 'hash-factory';
-import { ElevenLabsProvider } from './providers/elevenlabs.js';
+import { ElevenLabsProvider, stripAudioTags } from './providers/elevenlabs.js';
 import { ResembleProvider } from './providers/resemble.js';
 import { CartesiaProvider } from './providers/cartesia.js';
 import { TypeSafeProvider } from './providers/typesafe.js';
@@ -178,7 +178,7 @@ export class VoiceMix {
     }
 
     _filename(text) {
-        const values = [text, this.promptText, this.xmlLang, this.ttsId, this.providerType];
+        const values = [stripAudioTags(text), this.promptText, this.xmlLang, this.ttsId, this.providerType];
         if (this._autoMoodActive()) values.push('autoMood');
         const parts = values.map(v => v ?? '').join(' ');
 

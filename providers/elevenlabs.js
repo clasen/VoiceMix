@@ -4,6 +4,11 @@ import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
 import { ProviderError } from '../errors.js';
 
+export function stripAudioTags(text) {
+    return text.replace(/\s*(?:\[[^\]]*\]\s*)+/g, (match, offset) =>
+        offset === 0 || offset + match.length === text.length ? '' : ' ');
+}
+
 export class ElevenLabsProvider {
     constructor(apiKey) {
         this.apiKey = apiKey || process.env.ELEVENLABS_API_KEY;

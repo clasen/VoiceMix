@@ -1,4 +1,5 @@
 import { ProviderError } from '../errors.js';
+import { stripAudioTags } from './elevenlabs.js';
 
 export const MOOD_TAGS = [
     'whispers', 'quietly', 'softly', 'nervous', 'hesitant', 'confused', 'thoughtful',
@@ -22,6 +23,9 @@ export class TypeSafeProvider {
             throw new ProviderError('TypeSafe API key is required', 'typesafe');
         }
 
+        const line = stripAudioTags(text);
+        if (!line) return null;
+
         const criteria = { [NO_TAG]: 'Neutral delivery; no tag clearly fits the line' };
         for (const tag of MOOD_TAGS) criteria[tag] = null;
 
@@ -32,7 +36,7 @@ export class TypeSafeProvider {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                state: text,
+                state: line,
                 model: this.model,
                 questions: {
                     mood: {
